@@ -185,4 +185,5 @@ module.exports = {
 
   buildApnsMessage,
   buildGcmMessage,
+  buildGcmNotification,
 };
