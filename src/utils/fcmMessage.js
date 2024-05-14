@@ -1,7 +1,12 @@
-const { buildGcmMessage, buildApnsMessage } = require('./tools');
+const {
+  buildGcmMessage,
+  buildApnsMessage,
+  buildGcmNotification,
+} = require('./tools');
 
 class FcmMessage {
   constructor(params) {
+    this.notification = params.notification;
     this.data = params.data;
     this.android = params.android;
     this.apns = params.apns;
@@ -9,6 +14,7 @@ class FcmMessage {
 
   buildWithRecipients(recipients) {
     return {
+      notification: this.notification,
       data: this.data,
       android: this.android,
       apns: this.apns,
@@ -70,7 +76,10 @@ class FcmMessage {
 
     const data = this.normalizeDataParams(fcmMessageParams.custom);
 
-    const createParams = { data };
+    const createParams = {
+      notification: buildGcmNotification(data),
+      data,
+    };
 
     if (!providersExclude.includes('apns')) {
       createParams.apns = this.buildApnsMessage(fcmMessageParams);
@@ -85,3 +94,4 @@ class FcmMessage {
 }
 
 module.exports = FcmMessage;
+
